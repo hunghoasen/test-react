@@ -1,66 +1,46 @@
 import Content from './Content';
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useReducer } from 'react';
 import './App.css';
 
-//two way bilding
+// Init states
+const initStates = 0;
+
+// Actions
+const UP_STATES = 'up'
+const DOWN_STATES = 'down'
+
+// Reducer
+const reducer = (state, action) => {
+  switch (action) {
+    case UP_STATES:
+      return state + 1
+    case DOWN_STATES:
+      return state - 1
+    default: new Error('invalid error')
+  }
+
+}
 
 function App() {
 
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [products, setProducts] = useState([])
+  const [cost, dispatch] = useReducer(reducer, initStates)
 
-  const btnName = useRef()
 
-  const handleAdd = () => {
-    setProducts([...products, {
-      name,
-      price: parseInt(price)
-    }])
-    setName('')
-    setPrice('')
-    btnName.current.focus();
-  }
-
-  const total = useMemo(() => {
-    const results = products.reduce((result, prod) => {
-      return result + prod.price
-    }, 0)
-
-    return results
-  }, [products])
 
   return (
 
     <div style={{ padding: "10px 32px" }}>
 
-      <input
-        ref={btnName}
-        value={name}
-        placeholder="Enter name..."
-        onChange={e => setName(e.target.value)}
-        type="text"
-      />
-      <br />
-      <input
-        value={price}
-        placeholder="Enter price..."
-        onChange={e => setPrice(e.target.value)}
-        type="text" />
+      <h1>{cost}</h1>
       <br />
       <button
-        onClick={handleAdd}
-      >Add</button>
-      <p>Total price:  {total}</p>
-      <ul>
-        {products.map((product, index) => (
-          <li key={index}>{product.name} - {product.price}</li>
-        ))}
-
-      </ul>
+        onClick={() => dispatch(UP_STATES)}
+      >Up</button>
+      <button
+        onClick={() => dispatch(DOWN_STATES)}
+      >Down</button>
 
     </div>
-
   )
 }
 
