@@ -22,8 +22,6 @@ function App() {
     btnName.current.focus();
   }
 
-  console.log("Hello moi nguoi");
-
   const total = useMemo(() => {
     const results = products.reduce((result, prod) => {
       return result + prod.price
